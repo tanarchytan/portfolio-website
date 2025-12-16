@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Security Architect Portfolio - Terminal themed",
   "scripts": {
-    "build": "npm audit && node build.js",
+    "build": "node build.js",
+    "build:audit": "npm audit && node build.js",
     "deploy": "echo \"Deployment handled by Cloudflare Pages\"",
     "dev": "npm run build && npx http-server dist -p 8788",
     "audit": "npm audit --audit-level=moderate",
