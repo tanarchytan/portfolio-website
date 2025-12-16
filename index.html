@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="David Gillot - Security Architect, Purple Team specialist focused on IT/OT security">
+    <title>David Gillot | Security Architect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="container">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="terminal-button"></div>
+                <div class="terminal-button"></div>
+                <div class="terminal-button"></div>
+                <span class="terminal-title">PurpleShell v2.1</span>
+            </div>
+            <div class="terminal-body">
+                <div class="ascii-art" id="ascii-art"></div>
+                
+                <p><span class="prompt">david@gillot:~$</span> <span class="command">whoami</span></p>
+                <h1 id="whoami-name"></h1>
+                <p class="output" id="whoami-subtitle"></p>
+                <p class="output" id="whoami-tagline"></p>
+                
+                <div>
+                    <p id="initial-ls-command"><span class="prompt">david@gillot:~$</span> <span class="command">ls -la</span></p>
+                    
+                    <div class="terminal-content active" id="file-listing">
+                        <div class="output">
+                            <div>total 36</div>
+                            <div>drwxr-xr-x  7 david gillot  4096 Dec 16 13:37 .</div>
+                            <div>drwxr-xr-x 12 david david   4096 Dec 16 13:37 ..</div>
+                            <div>-rwxr-xr-x  1 david gillot  2847 Dec 16 13:37 <button class="file-link" data-section="certifications" data-file="certifications.sh" data-type="sh">certifications.sh</button></div>
+                            <div>-rw-r--r--  1 david gillot 14203 Nov 15 09:24 <button class="file-link" data-section="experience" data-file="career.log" data-type="log">career.log</button></div>
+                            <div>-rw-r--r--  1 david gillot  9614 Oct 28 14:16 <button class="file-link" data-section="projects" data-file="projects.txt" data-type="txt">projects.txt</button></div>
+                            <div>-rw-r--r--  1 david gillot  3892 Dec 16 13:37 <button class="file-link" data-section="skills" data-file="skills.txt" data-type="txt">skills.txt</button></div>
+                            <div>-rwxr-xr-x  1 david gillot  1456 Dec 16 13:37 <button class="file-link" data-section="contact" data-file="contact.sh" data-type="sh">contact.sh</button></div>
+                        </div>
+                    </div>
+
+                    <div class="terminal-content" id="dynamic-content">
+                        <p id="executed-command"></p>
+                        <div id="content-area"></div>
+                        <button class="cmd-btn" onclick="showListing()">ls -la</button>
+                    </div>
+
+                    <p><span class="prompt">david@gillot:~$</span> <span class="command" id="bottom-prompt"></span><span class="blink" id="cursor">█</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;padding:40px 0;color:var(--primary-green);opacity:0.6">
+            <p>© 2025 David Gillot | Security Architect Portfolio</p>
+            <p style="font-size:0.8em;margin-top:10px">Pragmatic • Technical • Results-Driven</p>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js" defer></script>
+    <script>
+        // DOM Elements - cached once
+        const els = {
+            ascii: document.getElementById('ascii-art'),
+            name: document.getElementById('whoami-name'),
+            subtitle: document.getElementById('whoami-subtitle'),
+            tagline: document.getElementById('whoami-tagline'),
+            bottomPrompt: document.getElementById('bottom-prompt'),
+            cursor: document.getElementById('cursor'),
+            initialLs: document.getElementById('initial-ls-command'),
+            fileListing: document.getElementById('file-listing'),
+            dynamicContent: document.getElementById('dynamic-content'),
+            contentArea: document.getElementById('content-area'),
+            executedCommand: document.getElementById('executed-command')
+        };
+
+        // Initialize particles.js when loaded
+        window.addEventListener('load', () => {
+            if (typeof particlesJS !== 'undefined') {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 80, density: { enable: true, value_area: 800 } },
+                        color: { value: '#00ff00' },
+                        shape: { type: 'circle' },
+                        opacity: { value: 0.5 },
+                        size: { value: 3, random: true },
+                        line_linked: { enable: true, distance: 150, color: '#00ff00', opacity: 0.4, width: 1 },
+                        move: { enable: true, speed: 2, out_mode: 'out' }
+                    },
+                    interactivity: {
+                        events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' } },
+                        modes: { grab: { distance: 140, line_linked: { opacity: 1 } }, push: { particles_nb: 4 } }
+                    },
+                    retina_detect: true
+                });
+            }
+        });
+
+        // Load initial data
+        els.name.textContent = portfolioData.whoami.name;
+        els.subtitle.textContent = portfolioData.whoami.subtitle;
+        els.tagline.textContent = portfolioData.whoami.tagline;
+
+        // ASCII art rotation
+        const titles = portfolioData.whoami.titles;
+        let currentIdx = 0;
+        els.ascii.textContent = portfolioData.asciiArt[titles[0]];
+
+        function updateAscii() {
+            els.ascii.classList.add('fade');
+            setTimeout(() => {
+                currentIdx = (currentIdx + 1) % titles.length;
+                els.ascii.textContent = portfolioData.asciiArt[titles[currentIdx]];
+                els.ascii.classList.remove('fade');
+            }, 500);
+        }
+        setInterval(updateAscii, 5000);
+
+        // Typing animation
+        function typeCommand(text, callback) {
+            let i = 0;
+            els.bottomPrompt.textContent = '';
+            els.bottomPrompt.classList.add('typing');
+            els.cursor.style.display = 'none';
+            
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    els.bottomPrompt.textContent += text[i++];
+                } else {
+                    clearInterval(typing);
+                    els.bottomPrompt.classList.remove('typing');
+                    els.cursor.style.display = 'inline';
+                    if (callback) callback();
+                }
+            }, 50);
+        }
+
+        // Show file listing
+        function showListing() {
+            typeCommand('ls -la', () => {
+                els.fileListing.classList.add('active');
+                els.dynamicContent.classList.remove('active');
+                els.initialLs.style.display = 'block';
+                els.bottomPrompt.textContent = '';
+            });
+        }
+
+        // File click handlers
+        document.querySelectorAll('.file-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const { section, file, type } = link.dataset;
+                const command = type === 'sh' ? `bash ./${file}` : `cat ${file}`;
+                
+                typeCommand(command, () => {
+                    els.initialLs.style.display = 'none';
+                    els.executedCommand.innerHTML = `<span class="prompt">david@gillot:~$</span> <span class="command">${command}</span>`;
+                    
+                    const data = portfolioData[section];
+                    els.contentArea.innerHTML = `<h2>${data.title}</h2>${data.content}`;
+                    
+                    els.fileListing.classList.remove('active');
+                    els.dynamicContent.classList.add('active');
+                    els.bottomPrompt.textContent = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
