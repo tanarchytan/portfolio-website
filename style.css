@@ -128,10 +128,6 @@ h2 {
     opacity: 0;
 }
 
-.section {
-    margin: 40px 0;
-}
-
 .timeline-item {
     background: rgba(0, 255, 0, 0.05);
     border-left: 3px solid var(--primary-green);

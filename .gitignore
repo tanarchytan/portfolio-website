@@ -5,10 +5,6 @@ package-lock.json
 # Build output
 dist/
 
-# Wrangler
-.wrangler/
-.dev.vars
-
 # OS files
 .DS_Store
 Thumbs.db
