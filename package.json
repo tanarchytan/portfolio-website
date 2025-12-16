@@ -3,21 +3,20 @@
   "version": "1.0.0",
   "description": "Security Architect Portfolio - Terminal themed",
   "scripts": {
-    "build": "node build.js",
-    "deploy": "npm run build && wrangler pages deploy dist",
-    "dev": "wrangler pages dev dist"
+    "build": "npm audit && node build.js",
+    "deploy": "echo \"Deployment handled by Cloudflare Pages\"",
+    "dev": "npm run build && npx http-server dist -p 8788",
+    "audit": "npm audit --audit-level=moderate",
+    "audit:fix": "npm audit fix",
+    "update:check": "npm outdated"
   },
   "devDependencies": {
-    "clean-css": "^5.3.3",
     "html-minifier-terser": "^7.2.0",
     "terser": "^5.26.0",
-    "wrangler": "^4.54.0"
+    "clean-css": "^5.3.3",
+    "http-server": "^14.1.1"
   },
-  "keywords": [
-    "portfolio",
-    "security",
-    "cybersecurity"
-  ],
+  "keywords": ["portfolio", "security", "cybersecurity"],
   "author": "David Gillot",
   "license": "MIT"
 }
